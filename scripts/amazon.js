@@ -1,3 +1,7 @@
+import { cart, addtoCart } from "../data/cart.js";
+import { products } from "../data/products.js";
+import { formatCurrency } from "./utils/money.js"; // Import the formatCurrency function
+
 let productsHTML = "";
 
 products.forEach((product) => {
@@ -24,8 +28,8 @@ products.forEach((product) => {
             </div>
           </div>
 
-          <div class="product-price">$${(product.priceCents / 100).toFixed(
-            2
+          <div class="product-price">$${formatCurrency(
+            product.priceCents
           )}</div>
 
           <div class="product-quantity-container">
@@ -51,7 +55,7 @@ products.forEach((product) => {
           </div>
 
           <button class="add-to-cart-button button-primary js-add-to-cart"
-          data-product-id="${product.name}"
+          data-product-id="${product.id}"
           
           >Add to Cart</button>
         </div>`;
@@ -65,28 +69,22 @@ if (productsGrid) {
   console.error("Element with class 'js-products-grid' not found.");
 }
 
+function updateCartQuantity() {
+  let cartQuantity = 0;
+
+  cart.forEach((item) => {
+    cartQuantity += item.quantity;
+  });
+
+  document.querySelector(".js-cart-quantity").innerHTML = cartQuantity;
+}
+
 document.querySelectorAll(".js-add-to-cart").forEach((button) => {
   button.addEventListener("click", () => {
     const productId = button.dataset.productId;
+    console.log(button.dataset);
 
-    let matchingItem;
-
-    cart.forEach((item) => {
-      // Check if the product is already in the cart
-      if (productId === item.productId) {
-        matchingItem = item;
-      }
-    });
-
-    if (matchingItem) {
-      matchingItem.quantity += 1;
-    } else {
-      cart.push({
-        productId: productId,
-        quantity: 1,
-      });
-    }
-
-    console.log(cart);
+    addtoCart(productId);
+    updateCartQuantity();
   });
 });

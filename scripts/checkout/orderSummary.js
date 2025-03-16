@@ -3,13 +3,12 @@ import { products, getProducts } from "../../data/products.js";
 import { formatCurrency } from "../utils/money.js"; // Import the formatCurrency function
 import {deliveryOptions, getDeliveryOption} from '../../data/deliveryOptions.js'
 
+import { renderPaymentSummary } from "./paymentSummary.js";
+
 import {hello} from 'https://unpkg.com/supersimpledev@1.0.1/hello.esm.js'
 import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js'
 
-hello();
-const today = (dayjs());
-const deliveryDate = today.add(7, "days");
-console.log(deliveryDate.format("dddd, MMMM D"));
+
 
 export function renderOrderSummary(){
   
@@ -139,6 +138,8 @@ function deliveryOptionsHTML(matchingProduct, cartItem){
           `.js-cart-item-container-${productId}`
         );
         container.remove();
+
+        renderPaymentSummary();
       });
 
     });
@@ -151,6 +152,7 @@ function deliveryOptionsHTML(matchingProduct, cartItem){
         console.log(element.dataset);
         updateDeliveryOption(productId, deliveryOptionId);
         renderOrderSummary();
+        renderPaymentSummary();
       }
       );
     }

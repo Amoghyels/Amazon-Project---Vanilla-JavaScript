@@ -8,7 +8,9 @@ import { loadCart } from "../data/cart.js";
 //import '../data/backend-practice.js';
 
 async function loadPage(){
- 
+ try{
+  
+  await loadProductsFetch();  
 
   const value = await loadProductsFetch();
 
@@ -17,6 +19,11 @@ async function loadPage(){
       resolve();
     });
   });
+ }catch(error){
+    console.log('Unxepected error');
+ }
+
+  
 
   renderOrderSummary();
   renderPaymentSummary();
